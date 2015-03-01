@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="G:/jar Files/httpcomponents-client-4.3.5-bin/httpcomponents-client-4.3.5/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/httpcomponents-client-4.3.5-bin/httpcomponents-client-4.3.5/lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/httpcomponents-client-4.3.5-bin/httpcomponents-client-4.3.5/lib/fluent-hc-4.3.5.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/httpcomponents-client-4.3.5-bin/httpcomponents-client-4.3.5/lib/httpclient-4.3.5.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/httpcomponents-client-4.3.5-bin/httpcomponents-client-4.3.5/lib/httpclient-cache-4.3.5.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/httpcomponents-client-4.3.5-bin/httpcomponents-client-4.3.5/lib/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/httpcomponents-client-4.3.5-bin/httpcomponents-client-4.3.5/lib/httpmime-4.3.5.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/json-simple.jar/json-simple.jar"/>
+	<classpathentry kind="lib" path="G:/jar Files/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/fluent-hc-4.3.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-4.3.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-cache-4.3.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpmime-4.3.5.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
