@@ -26,7 +26,7 @@ import com.airline.dto.Slice;
 @SuppressWarnings("deprecation")
 public class HiFlyService {
 
-	// Given Source Destination, method gets real time flight details
+	// Given Source Destinaton, method gets real time flight details
 	public ArrayList<FlightDisplay> getRealTimeFlightData() {
 
 		long start = System.currentTimeMillis();
