@@ -158,7 +158,13 @@ public class HiFlyService {
 		// HiFlyService service = new HiFlyService();
 		// service.getRealTimeFlightData();
 		MemcacheClient cacheClient = MemcacheClient.getCacheInstance();
+		System.out.println(MemcacheClient.getCache().get("Lat31.351621252"));
+		System.out.println(MemcacheClient.getCache().get("Lon-113.580001831"));
+
+		System.out.println(MemcacheClient.getCache().get("Lon-71.3933029175"));
+
+		System.out.println(MemcacheClient.getCache().get("AirEDDK"));
+
 		// service.getGeoCode("sss");
 	}
-
 }
