@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import memcache.MemcacheClient;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -33,7 +35,6 @@ public class HiFlyService {
 		HttpClient httpClient = new DefaultHttpClient();
 		FlightData flightData = null;
 		ArrayList<FlightDisplay> flightDataList = null;
-
 		try {
 			JSONParser parser = new JSONParser();
 			Object obj = parser.parse(new FileReader(
@@ -154,9 +155,9 @@ public class HiFlyService {
 	}
 
 	public static void main(String[] str) {
-		HiFlyService service = new HiFlyService();
-		service.getRealTimeFlightData();
-
+		// HiFlyService service = new HiFlyService();
+		// service.getRealTimeFlightData();
+		MemcacheClient cacheClient = MemcacheClient.getCacheInstance();
 		// service.getGeoCode("sss");
 	}
 
