@@ -1,10 +1,10 @@
 package airport;
 
-import java.io.FileReader;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import json.utilities.JSonParserAirline;
+import json.utilities.JsonBuilder;
 import memcache.MemcacheClient;
 
 import org.apache.http.HttpResponse;
@@ -37,9 +37,12 @@ public class HiFlyService {
 		ArrayList<FlightDisplay> flightDataList = null;
 		try {
 			JSONParser parser = new JSONParser();
-			Object obj = parser.parse(new FileReader(
-					"C:/Users/Darshan/Desktop/SampleRequest.txt"));
-			JSONObject jsonObject = (JSONObject) obj;
+			// Object obj = parser.parse(new FileReader(
+			// "C:/Users/Darshan/Desktop/SampleRequest.txt"));
+			// JSONObject jsonObject = (JSONObject) obj;
+			JsonBuilder jBuilder = new JsonBuilder();
+			JSONObject jsonObject = (JSONObject) jBuilder
+					.createTravelRequest(null);
 
 			HttpPost request = new HttpPost(
 					"https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyAyxuBExWvwMpTeiaU1gNvQJVJ6SbzDroM");
