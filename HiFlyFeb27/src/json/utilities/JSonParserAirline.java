@@ -1,4 +1,4 @@
-package utilities;
+package json.utilities;
 
 import com.airline.dto.FlightData;
 import com.google.gson.Gson;

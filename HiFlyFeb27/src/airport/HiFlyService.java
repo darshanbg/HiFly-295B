@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import json.utilities.JSonParserAirline;
 import memcache.MemcacheClient;
 
 import org.apache.http.HttpResponse;
@@ -14,7 +15,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import utilities.JSonParserAirline;
 import utilities.StringUtilities;
 
 import com.airline.dto.Airline;
@@ -165,6 +165,5 @@ public class HiFlyService {
 
 		System.out.println(MemcacheClient.getCache().get("AirEDDK"));
 
-		// service.getGeoCode("sss");
 	}
 }
