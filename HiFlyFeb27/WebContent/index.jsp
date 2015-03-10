@@ -9,7 +9,7 @@
 <meta name="author" content="">
 <link rel="icon" href="../../favicon.ico">
 
-<title>Cover Template for Bootstrap</title>
+<title>HiFly - Flight Recommendation</title>
 
 <%@ page import="com.airline.dto.FlightDisplay"%>
 <%@ page import="java.util.ArrayList"%>
@@ -55,6 +55,8 @@
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	width: 100%;
 	border-collapse: collapse;
+	overflow: auto;
+	height: 400px;
 }
 
 #customers td,#customers th {
@@ -76,6 +78,7 @@
 	color: #000000;
 	background-color: #EAF2D3;
 }
+
 </style>
 </head>
 
@@ -104,18 +107,17 @@
 								.getAttribute("displayList");
 					%>
 
+				<form name="myForm" action="IternaryServlet" method="POST">
 					<p>
-						<input placeholder="Source" required autofocus> <input
-							placeholder="Destination" required autofocus> <input
-							type="date" name="date">
+						<input placeholder="Source" required autofocus style="text-transform:uppercase"> <input
+							placeholder="Destination" required style="text-transform:uppercase" > <input
+							type="date" name="date" required >
 					</p>
 
 					<p>
 						Adult Passengers:<input type="number" name="adultCount" min="1"
 							max="5">
-						<form name="myForm" action="IternaryServlet" method="POST">
 						<button id="hide">Search</button>
-					</form>
 					</p>
 
 					<p>
@@ -151,6 +153,9 @@
 
 						</table>
 					</div>
+					
+				</form>
+					
 
 					<p>
 						<input id="advanceOptionCheckBox" type="checkbox" name="advance">
@@ -220,9 +225,8 @@
 
 					<%
 						if (result != null) {
-							for (FlightDisplay display : result) {
-					%>
-
+							%>
+						
 					<br> <br>
 					<div id="customers">
 						<table>
@@ -230,27 +234,30 @@
 								<th>Flight Number</th>
 								<th>Arrival Time</th>
 								<th>Departure Time</th>
-							</tr>
+							</tr>	
+					<%		
+							for (FlightDisplay display : result) {
+					%>
 							<tr>
 								<td><%=display.getAircraft()%></td>
 								<td><%=display.getArrivalTime()%></td>
 								<td><%=display.getDepartureTime()%></td>
 							</tr>
-						</table>
-					</div>
+
 					<%
 						}
-						}
+					}
 					%>
+											</table>
+					</div>
 					
 
 				</div>
 
 				<div class="mastfoot">
 					<div class="inner">
-						<p>
-							Cover template for <a href="http://getbootstrap.com">Bootstrap</a>,
-							by <a href="https://twitter.com/mdo">@mdo</a>.
+						<p align="center">
+							HiFly - Flight Recommendation System 
 						</p>
 					</div>
 				</div>

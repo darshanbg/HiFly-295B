@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import json.utilities.JSonParserAirline;
 import json.utilities.JsonBuilder;
-import memcache.MemcacheClient;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -13,8 +12,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
+import utilities.StringConstants;
 import utilities.StringUtilities;
 
 import com.airline.dto.Airline;
@@ -36,16 +35,11 @@ public class HiFlyService {
 		FlightData flightData = null;
 		ArrayList<FlightDisplay> flightDataList = null;
 		try {
-			JSONParser parser = new JSONParser();
-			// Object obj = parser.parse(new FileReader(
-			// "C:/Users/Darshan/Desktop/SampleRequest.txt"));
-			// JSONObject jsonObject = (JSONObject) obj;
 			JsonBuilder jBuilder = new JsonBuilder();
 			JSONObject jsonObject = (JSONObject) jBuilder
 					.createTravelRequest(null);
 
-			HttpPost request = new HttpPost(
-					"https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyAyxuBExWvwMpTeiaU1gNvQJVJ6SbzDroM");
+			HttpPost request = new HttpPost(StringConstants.STR_FLIGHT_API);
 			StringEntity params = new StringEntity(jsonObject.toString());
 			request.addHeader("content-type", "application/json");
 			request.addHeader("Accept", "application/json");
@@ -79,8 +73,13 @@ public class HiFlyService {
 
 		HttpClient httpClient = new DefaultHttpClient();
 		try {
-			String req = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.placefinder%20where%20text%3D%22329%20e%20san%20fernando%20st%20san%20jose%2095112%22&format=json&diagnostics=true&callback=";
-			HttpPost request = new HttpPost(req);
+			StringBuilder req = new StringBuilder();
+			req.append(StringConstants.STR_GEO_CODE_API);
+			address = address.replaceAll(" ", "%20");
+			req.append(address);
+			req.append(StringConstants.STR_DIAGONISTIC_FLAG);
+
+			HttpPost request = new HttpPost(String.valueOf(req));
 			request.addHeader("content-type", "application/json");
 			request.addHeader("Accept", "application/json");
 			HttpResponse response = httpClient.execute(request);
@@ -101,9 +100,8 @@ public class HiFlyService {
 		HttpClient httpClient = new DefaultHttpClient();
 
 		try {
-			HttpPost request = new HttpPost(
-					"http://airports.pidgets.com/v1/airports?near="
-							+ geoCode[0] + "," + geoCode[1]);
+			HttpPost request = new HttpPost(StringConstants.STR_AIRPORT_API
+					+ geoCode[0] + "," + geoCode[1]);
 			request.addHeader("content-type", "application/json");
 			request.addHeader("Accept", "application/json");
 			HttpResponse response = httpClient.execute(request);
@@ -158,15 +156,19 @@ public class HiFlyService {
 	}
 
 	public static void main(String[] str) {
-		// HiFlyService service = new HiFlyService();
+		HiFlyService service = new HiFlyService();
 		// service.getRealTimeFlightData();
-		MemcacheClient cacheClient = MemcacheClient.getCacheInstance();
-		System.out.println(MemcacheClient.getCache().get("Lat31.351621252"));
-		System.out.println(MemcacheClient.getCache().get("Lon-113.580001831"));
 
-		System.out.println(MemcacheClient.getCache().get("Lon-71.3933029175"));
+		// MemcacheClient cacheClient = MemcacheClient.getCacheInstance();
+		// System.out.println(MemcacheClient.getCache().get("Lat31.351621252"));
+		// System.out.println(MemcacheClient.getCache().get("Lon-113.580001831"));
+		//
+		// System.out.println(MemcacheClient.getCache().get("Lon-71.3933029175"));
+		//
+		// System.out.println(MemcacheClient.getCache().get("AirEDDK"));
 
-		System.out.println(MemcacheClient.getCache().get("AirEDDK"));
-
+		service.getGeoCode("201 S 4th Street, 95112");
+		service.getAirportWithinGeoCode(service
+				.getGeoCode("201 S 4th Street, 95112"));
 	}
 }
