@@ -18,8 +18,8 @@ public class JsonBuilder {
 		map.put("sliceLength", "1");
 		map.put("origin", "SJC");
 		map.put("destination", "NYC");
-		map.put("date", "2015-03-11");
-		map.put("solutions", "4");
+		map.put("date", "2015-03-28");
+		map.put("solutions", "20");
 
 		JSONObject mainReqObject = new JSONObject();
 		JSONObject reqObject = new JSONObject();

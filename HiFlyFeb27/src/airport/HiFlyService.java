@@ -102,13 +102,13 @@ public class HiFlyService {
 		try {
 			HttpPost request = new HttpPost(StringConstants.STR_AIRPORT_API
 					+ geoCode[0] + "," + geoCode[1]);
-			request.addHeader("content-type", "application/json");
-			request.addHeader("Accept", "application/json");
+			// request.addHeader("content-type", "application/json");
+			// request.addHeader("Accept", "application/json");
 			HttpResponse response = httpClient.execute(request);
 			InputStream is = response.getEntity().getContent();
 
 			JSonParserAirline customParser = new JSonParserAirline();
-			customParser.parseGeoCode(StringUtilities.convertToString(is));
+			System.out.println(StringUtilities.convertToString(is));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -167,7 +167,7 @@ public class HiFlyService {
 		//
 		// System.out.println(MemcacheClient.getCache().get("AirEDDK"));
 
-		service.getGeoCode("201 S 4th Street, 95112");
+		// service.getGeoCode("201 S 4th Street, 95112");
 		service.getAirportWithinGeoCode(service
 				.getGeoCode("201 S 4th Street, 95112"));
 	}

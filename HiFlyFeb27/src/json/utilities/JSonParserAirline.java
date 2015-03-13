@@ -36,8 +36,10 @@ public class JSonParserAirline {
 					.get("Result");
 
 			if (object != null) {
-				latLon[1] = object.get("longitude").toString();
-				latLon[0] = object.get("latitude").toString();
+				latLon[1] = object.get("longitude").toString()
+						.replaceAll("\\W", "");
+				latLon[0] = object.get("latitude").toString()
+						.replaceAll("\\W", "");
 			}
 		}
 		catch (Exception e) {
