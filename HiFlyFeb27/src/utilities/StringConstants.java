@@ -10,6 +10,6 @@ public class StringConstants {
 	public static final String STR_DIAGONISTIC_FLAG = "%22&diagnostics=true";
 
 	// Airport API using geo code
-	public static final String STR_AIRPORT_API = "http://airports.pidgets.com/v1/airports?near=";
+	public static final String STR_AIRPORT_API = "http://airports.pidgets.com/v1/airports?near=Toronto&n=5?format=json";
 
 }

@@ -12,69 +12,61 @@ import org.json.simple.JSONObject;
 @SuppressWarnings("unchecked")
 public class JsonBuilder {
 
-	public JSONObject createTravelRequest(HashMap<String, String> map) {
-		map = new HashMap<String, String>();
-		map.put("adultCount", "1");
-		map.put("sliceLength", "1");
-		map.put("origin", "SJC");
-		map.put("destination", "NYC");
-		map.put("date", "2015-03-28");
-		map.put("solutions", "20");
+	public JSONArray createTravelRequest(HashMap<String, String> map) {
 
+		JSONArray jArray = new JSONArray();
 		JSONObject mainReqObject = new JSONObject();
-		JSONObject reqObject = new JSONObject();
-		reqObject.put("passengers", getPassengerObject(map));
-		reqObject.put("solutions", map.get("solutions"));
-		reqObject
-				.put("refundable", Boolean.parseBoolean(map.get("refundable")));
-		reqObject.put("slice", getSliceArray(map));
+		for (int i = 0; i < Integer.parseInt(map.get("sliceLength")); i++) {
 
-		mainReqObject.put("request", reqObject);
+			JSONObject reqObject = new JSONObject();
+			reqObject.put("passengers", getPassengerObject(map));
+			reqObject.put("solutions", map.get("solutions"));
+			reqObject.put("refundable", Boolean.parseBoolean(map.get("refundable")));
+			reqObject.put("slice", getSliceArray(map, i));
+
+			mainReqObject.put("request", reqObject);
+			jArray.add(mainReqObject);
+		}
+
 		System.out.println(mainReqObject);
-		return mainReqObject;
+		return jArray;
 	}
 
 	private JSONObject getPassengerObject(HashMap<String, String> map) {
 		JSONObject passObject = new JSONObject();
 		passObject.put("adultCount", getValueForKey(map, "adultCount"));
-		passObject.put("infantInLapCount",
-				getValueForKey(map, "infantInLapCount"));
-		passObject.put("infantInSeatCount",
-				getValueForKey(map, "infantInSeatCount"));
+		passObject.put("infantInLapCount", getValueForKey(map, "infantInLapCount"));
+		passObject.put("infantInSeatCount", getValueForKey(map, "infantInSeatCount"));
 		passObject.put("childCount", getValueForKey(map, "childCount"));
 		passObject.put("seniorCount", getValueForKey(map, "seniorCount"));
 		return passObject;
 	}
 
-	private JSONArray getSliceArray(HashMap<String, String> map) {
+	private JSONArray getSliceArray(HashMap<String, String> map, int i) {
 		JSONArray sliceArray = new JSONArray();
 
-		for (int i = 0; i < Integer.parseInt(map.get("sliceLength")); i++) {
-			JSONObject sliceObj = new JSONObject();
+		JSONObject sliceObj = new JSONObject();
 
-			// Mandatory Fields
-			sliceObj.put("origin", map.get("origin"));
-			sliceObj.put("destination", map.get("destination"));
-			sliceObj.put("date", map.get("date"));
+		// Mandatory Fields
+		sliceObj.put("origin", map.get("sourceCode" + (i + 1)));
+		sliceObj.put("destination", map.get("destCode" + (i + 1)));
+		sliceObj.put("date", map.get("date"));
 
-			// Optional fields
-			if (map.containsKey("maxStops"))
-				sliceObj.put("maxStops", map.get("maxStops"));
-			if (map.containsKey("maxConnectionDuration"))
-				sliceObj.put("maxConnectionDuration",
-						map.get("maxConnectionDuration"));
-			if (map.containsKey("preferredCabin"))
-				sliceObj.put("preferredCabin", map.get("preferredCabin"));
-			if (map.containsKey("alliance"))
-				sliceObj.put("alliance", map.get("alliance"));
+		// Optional fields
+		if (map.containsKey("maxStops"))
+			sliceObj.put("maxStops", map.get("maxStops"));
+		if (map.containsKey("maxConnectionDuration"))
+			sliceObj.put("maxConnectionDuration", map.get("maxConnectionDuration"));
+		if (map.containsKey("preferredCabin"))
+			sliceObj.put("preferredCabin", map.get("preferredCabin"));
+		if (map.containsKey("alliance"))
+			sliceObj.put("alliance", map.get("alliance"));
 
-			// optional objects
-			if (map.containsKey("permittedDepartureTime"))
-				sliceObj.put("permittedDepartureTime",
-						getPermittedDepTimeObject(map
-								.get("permittedDepartureTime")));
-			sliceArray.add(sliceObj);
-		}
+		// optional objects
+		if (map.containsKey("permittedDepartureTime"))
+			sliceObj.put("permittedDepartureTime",
+					getPermittedDepTimeObject(map.get("permittedDepartureTime")));
+		sliceArray.add(sliceObj);
 
 		return sliceArray;
 	}

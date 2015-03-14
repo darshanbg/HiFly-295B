@@ -109,9 +109,9 @@
 
 				<form name="myForm" action="IternaryServlet" method="POST">
 					<p>
-						<input placeholder="Source" required autofocus style="text-transform:uppercase"> <input
-							placeholder="Destination" required style="text-transform:uppercase" > <input
-							type="date" name="date" required >
+						<input placeholder="Source" required autofocus style="text-transform:uppercase" name="source"> 
+						<input placeholder="Destination" required style="text-transform:uppercase" name="destination"> 
+						<input type="date" name="date" required >
 					</p>
 
 					<p>
@@ -121,8 +121,7 @@
 					</p>
 
 					<p>
-						<input id="moreOptionCheckBox" type="checkbox" name="vehicle"
-							value="Bike"> More Options
+						<input id="moreOptionCheckBox" type="checkbox" name = "moreOptionCheckBox"> More Options
 					</p>
 
 					<div id="moreOptionsDiv" class="inner cover">
@@ -158,7 +157,7 @@
 					
 
 					<p>
-						<input id="advanceOptionCheckBox" type="checkbox" name="advance">
+						<input id="advanceOptionCheckBox" type="checkbox" name="advanceOptionCheckBox">
 						Advance Options
 					</p>
 
@@ -166,43 +165,43 @@
 						<table id="customers">
 							<tr>
 								<td>Max Price</td>
-								<td><input placeholder="Ex: 2000" required autofocus>
+								<td><input type="number" placeholder="Ex: 2000" required autofocus name="maxPrice">
 								</td>
 							</tr>
 
 							<tr>
 								<td>Earliest Departure Time</td>
-								<td><input placeholder="HH:MM" required autofocus>
+								<td><input type="time" placeholder="HH:MM" required autofocus name="earliestDeptTime">
 								</td>
 							</tr>
 
 							<tr>
 								<td>Latest Departure Time</td>
-								<td><input placeholder="HH:MM" required autofocus>
+								<td><input type="time" placeholder="HH:MM" required autofocus name="latestDepartureTime">
 								</td>
 							</tr>
 							
 							<tr>
 								<td>Permitted Carriers</td>
-								<td><input placeholder="XX, YY, .." required autofocus>
+								<td><input placeholder="XX, YY, .." required autofocus name="permittedCarriers">
 								</td>
 							</tr>
 
 							<tr>
 								<td>Max Connection Time (In Min)</td>
-								<td><input placeholder="240 min" required autofocus>
+								<td><input type="number" placeholder="240 min" required autofocus name="maxConnectionDuration">
 								</td>
 							</tr>
 							
 							<tr>
 								<td>Prohibited Carriers</td>
-								<td><input placeholder="XX, YY, .." required autofocus>
+								<td><input placeholder="XX, YY, .." required autofocus name="prohinitedCarriers">
 								</td>
 							</tr>
 
 							<tr>
-								<td>Preferred Cabin</td>
-								<td><select>
+								<td>Preferred Cabin </td>
+								<td><select name = "preferredCabin">
 										<option value="None">None</option>
 										<option value="Coach">Coach</option>
 										<option value="Premium Coach">Premium Coach</option>
@@ -212,7 +211,7 @@
 							</tr>
 							
 							<tr>
-								<td>Refundable? <input type="checkbox" id="refundableCheckBox" name="refundable"></td>
+								<td>Refundable? <input type="checkbox" name="refundable"></td>
 								<td>Non Stop? <input type="checkbox" name="nonStop"></td>
 							</tr>
 							
@@ -239,9 +238,11 @@
 							for (FlightDisplay display : result) {
 					%>
 							<tr>
+							<td><%=display.getCarrier()%></td>
 								<td><%=display.getAircraft()%></td>
 								<td><%=display.getArrivalTime()%></td>
 								<td><%=display.getDepartureTime()%></td>
+								<td><%=display.getSaleTotal()%></td>
 							</tr>
 
 					<%
