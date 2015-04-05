@@ -3,12 +3,7 @@ package com.recommendation.utilities;
 public class StringConstants {
 
 	// Google API for real time fligth data
-	// Prady
-	// public static final String STR_FLIGHT_API =
-	// "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyAMAEUeJ-dm4_cLX7TP-MCwcx8dAG5yVXA";
-
-	// Darshan
-	public static final String STR_FLIGHT_API = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyAyxuBExWvwMpTeiaU1gNvQJVJ6SbzDroM";
+	public static final String STR_FLIGHT_API = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=AIzaSyAMAEUeJ-dm4_cLX7TP-MCwcx8dAG5yVXA";
 
 	// Yahoo Geo Code
 	public static final String STR_GEO_CODE_API = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.placefinder%20where%20text%3D%22";

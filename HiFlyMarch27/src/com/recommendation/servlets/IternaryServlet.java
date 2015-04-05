@@ -11,11 +11,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.recommendation.airline.dto.FlightDisplay;
 import com.recommendation.airport.HiFlyService;
+import com.recommendation.memcache.CrunchifyInMemoryCache;
 import com.recommendation.utilities.StringConstants;
 
 /**
@@ -25,7 +25,8 @@ import com.recommendation.utilities.StringConstants;
 public class IternaryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Gson gson = new Gson();
-
+	String userId = "1";
+	CrunchifyInMemoryCache<String, ArrayList<FlightDisplay>> cache = null;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -45,6 +46,12 @@ public class IternaryServlet extends HttpServlet {
 		HashMap<String, String> map = createRequestMap(request);
 		ArrayList<FlightDisplay> flightDisplayLis = (ArrayList<FlightDisplay>) service
 				.getRealTimeFlightData(map);
+		 cache = (CrunchifyInMemoryCache<String, ArrayList<FlightDisplay>>)getServletContext().getAttribute("flightCache");
+		 if(cache.get(userId)!=null){
+			 flightDisplayLis.addAll(cache.get(userId));
+		 }
+		service.sortFlightDisplay(flightDisplayLis);
+		cache.put(userId, flightDisplayLis);
 		// pw.write("After==>"+
 		// request.getParameter("source")+"===>"+request.getParameter("destination"));
 		pw.write(gson.toJson(flightDisplayLis));
@@ -61,7 +68,6 @@ public class IternaryServlet extends HttpServlet {
 			HiFlyService service = new HiFlyService();
 			String reqType = request.getParameter("reqType");
 			PrintWriter pw = response.getWriter();
-
 			if (reqType == null) {
 				HashMap<String, String> map = createRequestMap(request);
 				System.out.println(map);
@@ -95,8 +101,6 @@ public class IternaryServlet extends HttpServlet {
 	private HashMap<String, String> createRequestMap(HttpServletRequest request) {
 		HashMap<String, String> map = new HashMap<String, String>();
 
-		HttpSession session = request.getSession();
-		String userName = (String) session.getAttribute("userName");
 		String source = request.getParameter("source");
 		String destination = request.getParameter("destination");
 		String date = request.getParameter("date");
@@ -163,9 +167,8 @@ public class IternaryServlet extends HttpServlet {
 
 		// Default Fields
 		map.put("sliceLength", "1");
-		map.put("solutions", "20");
+		map.put("solutions", "5");
 		map.put("refundable", "false");
-		map.put("userName", userName);
 
 		map.put("source", source);
 		map.put("destination", destination);

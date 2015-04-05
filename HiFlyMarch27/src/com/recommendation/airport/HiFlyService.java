@@ -6,11 +6,9 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +35,6 @@ import com.recommendation.airline.dto.Airline;
 import com.recommendation.airline.dto.Flight;
 import com.recommendation.airline.dto.FlightData;
 import com.recommendation.airline.dto.FlightDisplay;
-import com.recommendation.airline.dto.FlightDisplay.TransitFlight;
 import com.recommendation.airline.dto.Leg;
 import com.recommendation.airline.dto.Pricing;
 import com.recommendation.airline.dto.Segment;
@@ -65,11 +62,35 @@ public class HiFlyService {
 		for (String key : map.keySet()) {
 			System.out.println("Key: " + key + "  " + "Value: " + map.get(key));
 		}
-
-		purpose = getTravelPurpose(map);
-		System.out.println(" Purpose of visit is **********************" + purpose);
-
-		/*
+		
+		String startD = map.get("date");
+		String source = map.get("source");
+		String destination = map.get("destination");
+		VisitPurpose1 visObj = new VisitPurpose1();
+		
+		//Hardcoding values for username, return date, start time and return time for now
+		SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
+		Date startT = new Date();
+		Date returnT = new Date();
+		
+		System.out.println(" Start date is ***********************" + startD);
+		String returnD = "2015-04-20";
+		try{
+		startT = parser.parse("17:00");
+		returnT = parser.parse("12:00");
+		}
+		catch(Exception e){
+			
+		}
+		
+		if(returnD == null || returnD == ""){
+			purpose = "CASUAL";
+			System.out.println(" There is no return date. Therefore, purpose determined**************" + purpose);
+		}
+		else{
+			purpose = visObj.findVisitPurpose(startD, returnD, startT, returnT);
+			System.out.println(" Purpose of visit is **********************" + purpose);
+		}		/*
 		 * Pushing user search results to database - To give recommendation
 		 * based on search history Table "SEARCH_HISTORY"
 		 * <=============================> CREATE TABLE IF NOT EXISTS
@@ -77,6 +98,26 @@ public class HiFlyService {
 		 * destination varchar(100), startDate varchar(10), returnDate
 		 * varchar(10), travelPurpose varchar(8) )
 		 */
+
+	MySql sqlCon = new MySql();
+		Connection con = sqlCon.getConnection();
+		
+		PreparedStatement insStatement;
+		try {
+			insStatement = con.prepareStatement("insert into MOOC.SEARCH_HISTORY values(?,?,?,?,?,?)");
+			insStatement.setString(1, "Roopa"); //username
+			insStatement.setString(2, source);
+			insStatement.setString(3, destination);
+			insStatement.setString(4, startD);
+			insStatement.setString(5, returnD);
+			insStatement.setString(6, purpose);
+
+			insStatement.execute();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 
 		long start = System.currentTimeMillis();
 		HttpClient httpClient = new DefaultHttpClient();
@@ -130,13 +171,9 @@ public class HiFlyService {
 			System.out.println("Time: " + (end - start));
 
 			if (purpose.equalsIgnoreCase("business"))
-				Collections.sort(flightDataList, new ChainedComparator(
-						new FlightDistanceComparator(), new FlightPriceComparator(),
-						new FlightDurationComparator()));
+				sortFlightDisplay(flightDataList);
 			else
-				Collections.sort(flightDataList, new ChainedComparator(
-						new FlightDistanceComparator(), new FlightPriceComparator(),
-						new FlightDurationComparator()));
+				sortFlightDisplay(flightDataList);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -144,8 +181,16 @@ public class HiFlyService {
 		finally {
 		}
 
-		insertBookingData(flightDataList, map.get("userName"));
 		return flightDataList;
+	}
+
+	/**
+	 * @param flightDataList
+	 */
+	public void sortFlightDisplay(ArrayList<FlightDisplay> flightDataList) {
+		Collections.sort(flightDataList, new ChainedComparator(
+				new FlightDistanceComparator(), new FlightPriceComparator(),
+				new FlightDurationComparator()));
 	}
 
 	// Get GeoCode for any given address
@@ -266,7 +311,7 @@ public class HiFlyService {
 		try {
 			location = location.replace(" ", "%20");
 			HttpPost request = new HttpPost("http://airports.pidgets.com/v1/airports?near="
-					+ location + "&n=1" + "&type=Airports");
+					+ location + "&n=3" + "&type=Airports");
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -348,12 +393,7 @@ public class HiFlyService {
 			e.printStackTrace();
 		}
 
-		String purpose = visObj.findVisitPurpose(startD, returnD, startT, returnT);
-
-		insertSearchedData(map.get("userName"), map.get("source"), map.get("destination"), startD,
-				returnD, purpose);
-
-		return purpose;
+		return visObj.findVisitPurpose(startD, returnD, startT, returnT);
 	}
 
 	private int getDistance(String source, ArrayList<String> sourceAirportList) {
@@ -363,132 +403,5 @@ public class HiFlyService {
 				break;
 		}
 		return i + 1;
-	}
-
-	private static void insertSearchedData(String userName, String source, String destination,
-			String startD, String returnD, String purpose) {
-		MySql sqlCon = new MySql();
-		Connection con = sqlCon.getConnection();
-		PreparedStatement insStatement;
-		try {
-			insStatement = con.prepareStatement("insert into SEARCH_HISTORY values(?,?,?,?,?,?)");
-			insStatement.setString(1, userName); // username //
-			insStatement.setString(2, source);
-			insStatement.setString(3, destination);
-			insStatement.setString(4, startD);
-			insStatement.setString(5, returnD);
-			insStatement.setString(6, purpose);
-			insStatement.execute();
-		}
-		catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-	}
-
-	public void register(String fName, String lName, String uName, String password) {
-		MySql sqlCon = new MySql();
-		Connection con = sqlCon.getConnection();
-		PreparedStatement insStatement;
-		try {
-			String query = "insert into USER (fName, lName, userName, password) values(?,?,?,?)";
-			insStatement = con.prepareStatement(query);
-			insStatement.setString(1, fName);
-			insStatement.setString(2, lName);
-			insStatement.setString(3, uName);
-			insStatement.setString(4, password);
-			insStatement.execute();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public String login(String uName, String password) {
-		MySql sqlCon = new MySql();
-		Connection con = sqlCon.getConnection();
-		PreparedStatement selStatement;
-		String result = "";
-		try {
-			String query = "Select password, fName, lName, userName from user where userName = ?";
-			selStatement = con.prepareStatement(query);
-			selStatement.setString(1, uName);
-			ResultSet res = selStatement.executeQuery();
-			int userCount = sqlCon.getRowCount(res);
-			if (userCount == 1) {
-				res.next();
-				String uPassword = res.getString(1);
-				if (uPassword.equals(password)) {
-					result += ", " + res.getString("fName");
-					result += "," + res.getString("lName");
-					result += "," + res.getString("userName");
-				}
-				return result;
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "-1";
-	}
-
-	public void insertBookingData(ArrayList<FlightDisplay> flightList, String userName) {
-		MySql sqlCon = new MySql();
-		Connection con = sqlCon.getConnection();
-		try {
-			Date date = new Date();
-			String query = "insert into Booking_History (bookingID, source, destination, userName, departTime, arrivalTime) values (?,?,?,?,?,?)";
-			String query2 = "insert into transit_details (bookingID, source, destination, carrier, departTime, arrivalTime, duration) values (?,?,?,?,?,?,?)";
-
-			for (FlightDisplay flight : flightList) {
-				ArrayList<FlightDisplay.TransitFlight> transitArray = flight.getTransitFlights();
-				String source = transitArray.get(0).getOrigin();
-				String dest = transitArray.get(transitArray.size() - 1).getDestination();
-				String arrivalTime = transitArray.get(0).getDepartureTime();
-				String departTime = transitArray.get(transitArray.size() - 1).getArrivalTime();
-				Calendar calendar = Calendar.getInstance();
-
-				// 2) get a java.util.Date from the calendar instance.
-				// this date will represent the current instant, or "now".
-				java.util.Date now = calendar.getTime();
-
-				// 3) a java current time (now) instance
-				java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
-				String bookingID = userName + currentTimestamp;
-
-				try {
-					PreparedStatement bookingInsert = con.prepareStatement(query);
-					bookingInsert.setString(1, bookingID);
-					bookingInsert.setString(2, source);
-					bookingInsert.setString(3, dest);
-					bookingInsert.setString(4, userName);
-					bookingInsert.setString(5, departTime);
-					bookingInsert.setString(6, arrivalTime);
-
-					PreparedStatement transitInsert = con.prepareStatement(query2);
-					for (int i = 0; i < transitArray.size(); i++) {
-						TransitFlight transFlight = transitArray.get(i);
-						transitInsert.setString(1, bookingID);
-						transitInsert.setString(2, transFlight.getOrigin());
-						transitInsert.setString(3, transFlight.getDestination());
-						transitInsert.setString(4, transFlight.getCarrier());
-						transitInsert.setString(5, transFlight.getDepartureTime());
-						transitInsert.setString(6, transFlight.getArrivalTime());
-						transitInsert.setString(7, transFlight.getDuration());
-						transitInsert.addBatch();
-					}
-					bookingInsert.execute();
-					transitInsert.executeBatch();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-					continue;
-				}
-			}
-
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 }

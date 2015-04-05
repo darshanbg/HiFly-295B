@@ -6,15 +6,6 @@ public class FlightDisplay {
 	private String saleTotal;
 	private int flightDuration;
 	private int distance;
-	private int flightReferKey;
-
-	public int getFlightReferKey() {
-		return flightReferKey;
-	}
-
-	public void setFlightReferKey(int flightReferKey) {
-		this.flightReferKey = flightReferKey;
-	}
 
 	public int getDistance() {
 		return distance;

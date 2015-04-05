@@ -1,57 +1,57 @@
 package com.recommendation.travel.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.lang.Exception;
+import java.sql.*;
 
 public class MySql {
-	public Connection getConnection() {
+	public Connection getConnection(){
 		Connection con = null;
-		String url = "jdbc:mysql://localhost/test";
-		String uname = "root";
-		String pwd = "root";
-		try {
 
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-				con = (Connection) DriverManager.getConnection(url, uname, pwd);
+		try{
 
-			}
-			catch (Exception e) {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/MOOC","root","root");
 
-				e.printStackTrace();
+			if(!con.isClosed()){
+				return con;
 			}
 			return con;
-
 		}
-		catch (Exception e) {
+		catch(Exception e){
 			System.out.println("Connection to DB could not be established");
 			return con;
 		}
 
 	}
 
-	public int getRowCount(ResultSet resultSet) {
-		if (resultSet == null) {
+
+	private int getRowCount(ResultSet resultSet) {
+		if (resultSet == null)
+		{
 			return 0;
 		}
-		try {
+		try
+		{
 			resultSet.last();
 			return resultSet.getRow();
 		}
-		catch (SQLException exp) {
+		catch (SQLException exp) 
+		{
 			exp.printStackTrace();
-		}
-		finally {
-			try {
+		} 
+		finally
+		{
+			try 
+			{
 				resultSet.beforeFirst();
 			}
-			catch (SQLException exp) {
+			catch (SQLException exp)
+			{
 				exp.printStackTrace();
 			}
 		}
 		return 0;
 	}
+
 
 }
